@@ -1,0 +1,10 @@
+---
+# vars file for wordpress
+document_root: /var/www
+vhost1: site.ru
+vhost2: site-2.ru
+
+#Wordpress Database
+wp_db_user: wordpress
+wp_db_password: P@ssw0rd
+wp_db_name: wordpress

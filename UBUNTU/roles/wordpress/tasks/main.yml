@@ -1,0 +1,31 @@
+---
+- name: Install git
+  apt: name=git state=latest
+
+- name: Pull code from GitHub
+  git:
+    repo: "https://github.com/WordPress/WordPress.git"
+    dest: /var/www/{{ vhost1 }}//doc_root/wordpress
+    clone: yes
+    update: yes
+    force: yes
+
+- name: Change DocumentRoot permission
+  file: 
+    path: "/var/www/{{ vhost1 }}/doc_root/wordpress"
+    owner: www-data
+    group: www-data
+    mode: 0755
+    recurse: yes    
+
+
+- name: Replace wordpress configurations file
+  template:
+    src: wp-config.php
+    dest: "/var/www/{{ vhost1 }}/doc_root/wordpress/"
+    force: yes
+
+ 
+
+
+  

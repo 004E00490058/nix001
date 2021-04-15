@@ -1,0 +1,27 @@
+- name: Install common package
+  apt:
+    name:
+      - git
+      - mc
+      - tree
+      - htop
+      - net-tools
+      - git
+      - build-essential
+      - vim
+      - tmux
+      - unzip 
+      - apache2-dev
+    state: latest
+#    update_cache: yes
+
+- name: Create  groups site-2.ru
+  group:
+    name: site2
+    state: present
+    
+- name: Create user site-2.ru
+  user: 
+    name: site2
+    password: "password"
+    update_password: on_create

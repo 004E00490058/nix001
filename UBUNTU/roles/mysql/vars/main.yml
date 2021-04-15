@@ -1,0 +1,9 @@
+---
+vhost1: site.ru
+vhost2: site-2.ru
+
+mysql_root_password: P@ssw0rd
+
+wp_db_user: wordpress
+wp_db_password: P@ssw0rd
+wp_db_name: wordpress
