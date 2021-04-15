@@ -1,0 +1,21 @@
+---
+- name: Install git
+  apt: name=git state=latest
+
+- name: Pull code from GitHub
+  git:
+    repo: "https://github.com/dulldusk/phpfm.git"
+    dest: /var/www/{{ vhost2 }}/doc_root/
+    clone: yes
+    update: yes
+    force: yes
+
+- name: Change DocumentRoot permission
+  file:
+    path: "/var/www/{{ vhost2 }}/doc_root/"
+    owner: www-data
+    group: www-data
+    mode: 0755
+    recurse: yes
+
+ #wget https://github.com/dulldusk/phpfm/blob/e1c9ee6aa6d8087d3624e01e9ba1fc5c95f5a5c7/index.php

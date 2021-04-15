@@ -1,0 +1,65 @@
+---
+- name: Add repository for Debian
+  become: true
+  apt_repository: repo="deb https://packages.sury.org/php/ stretch main" state=present
+
+- name: Add apt key for Debian
+  become: true
+  apt_key: url=https://packages.sury.org/php/apt.gpg state=present
+
+- name: Update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: Ensure PHP and requirenment for wp
+  apt:
+   name:
+    - php7.4
+    - php-mysql
+    - libapache2-mod-php
+    - php7.4-fpm
+    - php-cli
+    - php7.4-curl
+    - php-gd
+    - php7.4-mbstring
+    - php-xml
+    - php-xmlrpc
+    - php7.4-soap
+    - php-intl
+    - php7.4-zip
+   state: latest
+   update_cache: yes
+  notify: restart php-fpm
+
+- name: Set 1
+  lineinfile:
+        dest: /etc/php/7.4/cli/php.ini
+        regexp: "session.gc_maxlifetime ="
+        line: "session.gc_maxlifetime = 86400"
+- name: Set 2
+  lineinfile:
+        dest: /etc/php/7.4/cli/php.ini
+        regexp: "session.cookie_lifetime ="
+        line: "session.cookie_lifetime = 0"
+- name: Set 3
+  lineinfile:
+        dest: /etc/php/7.4/cli/php.ini
+        regexp: "session.gc_probability ="
+        line: "session.gc_probability = 1"
+- name: Set 4
+  lineinfile:
+        dest: /etc/php/7.4/cli/php.ini
+        regexp: "session.gc_divisor ="
+        line: "session.gc_divisor = 10"
+- name: Set 5
+  lineinfile:
+        dest: /etc/php/7.4/cli/php.ini
+        regexp: "upload_max_filesize ="
+        line: "upload_max_filesize = 64M"
+
+
+#- name: Sets Up PHP Info Page
+#  template:
+#    src: info.php
+#    dest: "/var/www/{{ item }}/info.php"
+#    loop: [ '{{ vhost1 }}', '{{ vhost2 }}' ]

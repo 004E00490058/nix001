@@ -1,0 +1,47 @@
+---
+- name: Stop service apache for install nginx
+  service: name=apache2 state=stopped 
+
+- name: Ensure nginx is installed
+  apt:
+    name: nginx
+    state: present
+
+- name: Stop service nginx
+  service: name=nginx state=stopped    
+    
+- name: Remove symlink default
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Copy configuration file for Apache virtual hosts
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    
+- name: Copy configuration file for Apache virtual hosts
+  copy:
+    src: site1.conf
+    dest: /etc/nginx/sites-available/site1.conf
+
+- name: Create symlink to site1
+  file: src=/etc/nginx/sites-available/site1.conf dest=/etc/nginx/sites-enabled/site1.conf state=link
+
+#for ubuntu    
+#- name: Add Symlink  
+#  shell: "sudo ln -sf /etc/nginx/sites-available/site1.conf /etc/nginx/sites-enabled/site1.conf"
+
+  
+- name: Copy configuration file for Apache virtual hosts
+  copy:
+    src: site2.conf
+    dest: /etc/nginx/sites-available/site2.conf
+    
+- name: Create symlink to site2
+  file: src=/etc/nginx/sites-available/site2.conf dest=/etc/nginx/sites-enabled/site2.conf state=link
+
+#- name: Add Symlink  
+#  shell: "sudo ln -sf /etc/nginx/sites-available/site2.conf /etc/nginx/sites-enabled/site2.conf"
+
+

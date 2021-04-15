@@ -1,0 +1,89 @@
+---
+- name: Prepare somethings for Debian OS
+  apt:
+    deb: https://dev.mysql.com/get/mysql-apt-config_0.8.16-1_all.deb
+
+- name: MySQL | install mysql packages
+  apt:
+    name:
+      - mysql-server
+      - mysql-common
+      - mysql-client
+      - python3-pymysql
+      - python-apt
+      - python3-apt
+      - python-mysqldb #for Debian
+      - python3-mysqldb
+    state: present
+
+- name: Set sql-option 1
+  lineinfile:
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: "query_cache_size ="
+        line: "query_cache_size = 32M"
+        
+- name: Set sql-option 2
+  lineinfile:
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: "tmp_table_size ="
+        line: "tmp_table_size = 50M"
+        
+- name: Set sql-option 3
+  lineinfile:
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: "thread_cache_size ="
+        line: "thread_cache_size = 20"
+        
+- name: Set sql-option 4
+  lineinfile:
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: "innodb_file_per_table ="
+        line: "innodb_file_per_table = 1"
+
+
+- name: Enabled Mysql
+  service: name=mysql state=started enabled=yes
+
+- name: Sets the root password
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: root
+    password: "{{ mysql_root_password }}"
+
+
+
+- name: Removes all anonymous user accounts
+  mysql_user:
+     name: ''
+     host_all: yes
+     state: absent
+     login_user: root
+     login_password: "{{ mysql_root_password }}"
+
+- name: Removes the MySQL test database
+  mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create database for wordpress
+  mysql_db:
+    name: "{{ wp_db_name }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create dbuser for {{ vhost1 }} wordpress site
+  mysql_user:
+    name: "{{ wp_db_user }}"
+    password: "{{ wp_db_password }}"
+    priv: "{{ wp_db_name }}.*:ALL"
+    host: localhost
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+
+
+    
+
