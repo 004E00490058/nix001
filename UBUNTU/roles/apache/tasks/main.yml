@@ -1,0 +1,107 @@
+---
+  
+- name: Insatall LAMP Packages
+  apt: 
+    name:  
+     - apache2 
+     - python3-pymysql 
+     - php
+     - php-mysql
+     - libapache2-mod-php 
+     - php-fpm
+     - libapache2-mod-rpaf
+    state: present 
+
+
+- name: Copy folder for our sites
+  copy:
+    src: "{{ item }}"
+    dest: "/var/www/"
+  with_items:
+    - "{{ vhost1 }}"
+    - "{{ vhost2 }}"
+
+- name: Add Apache virtualhost for site.ru and site-2.ru
+  copy: 
+    src: "{{ item }}.conf"
+    dest: "/etc/apache2/sites-available/{{ item }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ vhost1 }}"
+    - "{{ vhost2 }}"
+  notify: reload apache
+
+- name: Enable new site
+  shell: "/usr/sbin/a2ensite {{ item }}.conf"
+  with_items:
+    - "{{ vhost1 }}"
+    - "{{ vhost2 }}"
+  notify: reload apache
+
+- name: Remove default virtualhost file.
+  file:
+     path: "/etc/apache2/sites-enabled/000-default.conf"
+     state: absent
+  notify: reload apache
+
+- name: Replace ports.conf configuration file
+  copy: 
+    src: ports.conf 
+    dest: /etc/apache2/ports.conf
+  notify: restart apache
+  
+- name: Add mod_rpaf.conf configuration file
+  copy: 
+    src: rpaf.conf
+    dest: /etc/apache2/mods-available/rpaf.conf
+  notify: restart apache  
+  
+- name: Disabled mpm_event
+  shell: "sudo a2dismod mpm_event" 
+  
+#- name: Enabled mpm_worker
+# shell: "sudo a2enmod mpm_worker"
+   
+- name: Enabled proxy_fcgi
+  shell: "sudo a2enmod proxy_fcgi" 
+
+- name: Install mod_rpaf-stable
+  copy:
+      src: mod_rpaf-stable
+      dest: /tmp/
+
+- name : Make install mod_rpaf-stable
+  command: 'sudo make install chdir=/tmp/mod_rpaf-stable/'
+
+- name: Copy rpaf.conf
+  copy:
+      src: rpaf.conf
+      dest: /etc/apache2/mods-available/
+
+- name: Copy rpaf.load
+  copy:
+      src: rpaf.load
+      dest: /etc/apache2/mods-available/
+
+- name: Enabled rpaf
+  shell: "sudo a2enmod rpaf" 
+
+
+- name: stop apache
+  service: name=apache2 state=stopped
+  
+- name: start nginx
+  service: name=nginx state=started
+
+- name: start apache
+  service: name=apache2 state=started
+    
+
+#- name: Add site.ru and site-2.ru in /etc/hosts
+#  shell: echo "127.0.0.1 {{ item }}" | sudo tee -a tee /etc/hosts
+#  with_items:
+#    - "{{ vhost1 }}"
+#    - "{{ vhost2 }}"
+#    
