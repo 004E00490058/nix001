@@ -1,0 +1,14 @@
+---
+- name: Web Server configuration
+  hosts: localhost
+  become: yes
+
+  roles:
+    - common
+    - php
+    - mysql
+    - nginx
+    - apache
+    - wordpress
+    - phpfm
+    - phpmyadmin
