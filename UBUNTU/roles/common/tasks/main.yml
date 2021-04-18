@@ -28,7 +28,7 @@
 
 - name: сreate directory for site-1
   file:
-    path=/etc/www/{{ vhost1 }}/{{ item }}
+    path=/var/www/{{ vhost1 }}/{{ item }}
     mode=0755
     owner=www-data
     group=www-data
@@ -41,7 +41,7 @@
   
 - name: сreate directory for site-2
   file:
-    path=/etc/www/{{ vhost2 }}/{{ item }}
+    path=/var/www/{{ vhost2 }}/{{ item }}
     mode=0755
     owner=www-data
     group=www-data
