@@ -28,3 +28,29 @@
     name: site2
     password: "password"
     update_password: on_create
+
+- name: сreate directory for site-1
+  file:
+    path=/etc/www/{{ vhost1 }}/{{ item }}
+    mode=0755
+    owner=www-data
+    group=www-data
+    state=directory
+  with_items:
+   - doc_root
+   - temp
+   - sessions
+   - logs"   
+  
+- name: сreate directory for site-2
+  file:
+    path=/etc/www/{{ vhost2 }}/{{ item }}
+    mode=0755
+    owner=www-data
+    group=www-data
+    state=directory
+  with_items:
+   - doc_root
+   - temp
+   - sessions
+   - logs
