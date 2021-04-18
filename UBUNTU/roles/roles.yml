@@ -8,7 +8,7 @@
     - php
     - mysql
     - nginx
-    - apache
     - wordpress
+    - apache
     - phpfm
     - phpmyadmin
