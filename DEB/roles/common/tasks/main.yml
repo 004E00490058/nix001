@@ -40,7 +40,7 @@
    - doc_root
    - temp
    - sessions
-   - logs"   
+   - logs
   
 - name: сreate directory for site-2
   file:
