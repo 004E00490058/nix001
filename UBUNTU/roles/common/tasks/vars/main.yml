@@ -1,4 +1,0 @@
----
-# vars file for apache
-vhost1: site.ru
-vhost2: site-2.ru
