@@ -18,25 +18,25 @@
 
 - name: Set sql-option 1
   lineinfile:
-        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf 
         regexp: "query_cache_size ="
         line: "query_cache_size = 32M"
         
 - name: Set sql-option 2
   lineinfile:
-        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf 
         regexp: "tmp_table_size ="
         line: "tmp_table_size = 50M"
         
 - name: Set sql-option 3
   lineinfile:
-        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf 
         regexp: "thread_cache_size ="
         line: "thread_cache_size = 20"
         
 - name: Set sql-option 4
   lineinfile:
-        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf 
         regexp: "innodb_file_per_table ="
         line: "innodb_file_per_table = 1"
 
