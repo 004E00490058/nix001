@@ -5,7 +5,7 @@
 - name: Pull code from GitHub
   git:
     repo: "https://github.com/WordPress/WordPress.git"
-    dest: /var/www/{{ vhost1 }}//doc_root/wordpress
+    dest: /var/www/{{ vhost1 }}/doc_root/wordpress
     clone: yes
     update: yes
     force: yes
