@@ -12,19 +12,6 @@
      - libapache2-mod-rpaf
     state: present 
 
-- name: Copy folder for our sites
-  copy:
-    src: site_ru
-    dest: /var/www/html/
-
-- name: Copy folder for our sites
-  copy:
-    src: "{{ item }}"
-    dest: "/var/www/{{ item }}"
-  with_items:
-#    - "{{ vhost1 }}"
-    - "{{ vhost2 }}"
-
 - name: Add Apache virtualhost for site.ru and site-2.ru
   copy: 
     src: "{{ item }}.conf"
